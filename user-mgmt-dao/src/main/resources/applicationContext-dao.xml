@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:tx="http://www.springframework.org/schema/tx"
+	   xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	   
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+          http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+          http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+		   http://www.springframework.org/schema/data/jpa
+      http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+	
+	<jpa:repositories base-package="org.test" />
+	
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="classpath:db.properties" />
+	</bean>
+
+	
+	<bean id="userMgmtDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="dataSourceName" value="userMgmtDS"/>
+        <property name="driverClass" value="${usermgmt.db.driver.class}"/>
+        <property name="jdbcUrl" value="${usermgmt.db.jdbc.url}"/>
+        <property name="user" value="${usermgmt.db.user}"/>
+        <property name="password" value="${usermgmt.db.password}"/>
+        <property name="maxPoolSize" value="${usermgmt.db.max.pool.size}"/>
+        <property name="maxStatements" value="${usermgmt.db.max.statements}"/>
+        <property name="minPoolSize" value="${usermgmt.db.min.pool.size}"/>
+        <property name="maxIdleTime" value="${usermgmt.db.max.idle.time}"/>
+        <property name="idleConnectionTestPeriod" value="${usermgmt.db.idle.connection.test.period}"/>
+        <property name="preferredTestQuery" value="${usermgmt.db.preferred.test.query}"/>
+        <property name="checkoutTimeout" value="${usermgmt.db.checkout.timeout}"/>
+        <property name="acquireRetryAttempts" value="${usermgmt.db.acquire.retry.attempt}"/>
+        <property name="acquireRetryDelay" value="${usermgmt.db.acquire.retry.delay}"/>
+    </bean>
+
+    <bean id="userMgmtEntityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource" ref="userMgmtDataSource" />
+		<property name="persistenceUnitName" value="usermgmt" />
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<property name="showSql" value="${usermgmt.db.show.sql}" />
+				<property name="generateDdl" value="${usermgmt.db.generate.ddl}" />
+        		<property name="databasePlatform" value="${usermgmt.db.dialect.class}"/>
+			</bean>
+		</property>
+		<property name="packagesToScan" value="com.test"/>
+		<property name="jpaProperties">
+			<map>
+				<!--
+				TRANSACTION_NONE	     		= 0
+				TRANSACTION_READ_UNCOMMITTED 	= 1
+				TRANSACTION_READ_COMMITTED   	= 2 
+				TRANSACTION_REPEATABLE_READ  	= 4
+				TRANSACTION_SERIALIZABLE     	= 8
+				 -->
+				<entry key="hibernate.connection.isolation" value="2" />
+				<!-- required for hsql -->
+				<entry key="hibernate.default_schema" value="usermgmt_db" />
+			</map>
+		</property>
+	</bean>
+
+	<bean id="userMgmtTransactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="userMgmtEntityManagerFactory" />
+	</bean>
+	<tx:annotation-driven transaction-manager="userMgmtTransactionManager" />
+
+</beans>
