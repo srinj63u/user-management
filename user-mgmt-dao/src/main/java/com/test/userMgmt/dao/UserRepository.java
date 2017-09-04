@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author sk11
  */
-@Transactional(value="userMgmtTransactionManager")
+@Transactional(value="transactionManager")
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
 	

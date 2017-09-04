@@ -11,7 +11,7 @@
 		   http://www.springframework.org/schema/data/jpa
       http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
 	
-	<jpa:repositories base-package="org.test" />
+	<jpa:repositories base-package="com.test.userMgmt.dao"/>
 	
 	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="location" value="classpath:db.properties" />
@@ -35,7 +35,7 @@
         <property name="acquireRetryDelay" value="${usermgmt.db.acquire.retry.delay}"/>
     </bean>
 
-    <bean id="userMgmtEntityManagerFactory"
+    <bean id="entityManagerFactory"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
 		<property name="dataSource" ref="userMgmtDataSource" />
 		<property name="persistenceUnitName" value="usermgmt" />
@@ -58,14 +58,14 @@
 				 -->
 				<entry key="hibernate.connection.isolation" value="2" />
 				<!-- required for hsql -->
-				<entry key="hibernate.default_schema" value="usermgmt_db" />
+				<!--<entry key="hibernate.default_schema" value="usermgmt_db" />-->
 			</map>
 		</property>
 	</bean>
 
-	<bean id="userMgmtTransactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-		<property name="entityManagerFactory" ref="userMgmtEntityManagerFactory" />
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
-	<tx:annotation-driven transaction-manager="userMgmtTransactionManager" />
+	<tx:annotation-driven transaction-manager="transactionManager" />
 
 </beans>

@@ -20,6 +20,8 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.ws.soap.Addressing;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -31,6 +33,8 @@ import org.springframework.stereotype.Component;
 @Component
 @Path("/users")
 public class UsersResource {
+	
+	private static final Logger logger = LoggerFactory.getLogger(UsersResource.class);
 
 	@Autowired
 	private UserService userService;
@@ -39,15 +43,21 @@ public class UsersResource {
     @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response createUser(User user) {
-		com.test.userMgmt.entities.User userEntity = UserTransformer.toEntity(user);
-		com.test.userMgmt.entities.User userEntityPersisted = userService.createUser(userEntity);
-		return Response.status(Response.Status.CREATED).entity(buildResponseSchema(userEntityPersisted)).build();
+		try{
+			com.test.userMgmt.entities.User userEntity = UserTransformer.toEntity(user);
+			com.test.userMgmt.entities.User userEntityPersisted = userService.createUser(userEntity);
+			return Response.status(Response.Status.CREATED).entity(buildResponseSchema(userEntityPersisted)).build();
+		}catch(Exception e){
+			logger.error("", e);
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		}	
 	}
 	
 	private User buildResponseSchema(com.test.userMgmt.entities.User userEntity){
 		User userSchema = UserTransformer.toSchema(userEntity);
 		
 		Link[] links = new Link[1];
+		links[0] = new Link();
 		links[0].setRel("/login/" + userEntity.getId());
 		links[0].setType("login");
 		
