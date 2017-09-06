@@ -19,6 +19,7 @@ public class UserService {
 	
 	@Autowired
 	private UserRepository userDao;
+	@Autowired
 	private EmailService emailService;
 	
 	public User createUser(User user){
@@ -27,10 +28,11 @@ public class UserService {
 	}
 	
 	public String createLogin(String userId, String url){
-		String uniqueId = null;
+		String uniqueId = url+"?token";
+		User user = userDao.findOne(Integer.valueOf(userId));
 		//check user already exists
 		//generate unique identifier which contains both userid and timestamp, encode it and return
-		emailService.sendEmail(uniqueId, userId);
+		emailService.sendEmail(user.getEmail(), uniqueId);
 		return uniqueId;
 	}
 	

@@ -13,7 +13,8 @@
 	
 	<jpa:repositories base-package="com.test.userMgmt.dao"/>
 	
-	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+	<bean id="dbPropertyPlaceholder" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="ignoreUnresolvablePlaceholders" value="true"/>
 		<property name="location" value="classpath:db.properties" />
 	</bean>
 

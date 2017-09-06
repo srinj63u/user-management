@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+          http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	
+	<context:component-scan base-package="com.test"/> 
+	
+	<bean id="outmailPropertyPlaceholder" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="ignoreUnresolvablePlaceholders" value="true"/>
+		<property name="location" value="classpath:outmail.properties" />
+	</bean>
+	
+	<!-- SET default mail properties -->
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="${usermgmt.outmail.host}"/>
+        <property name="port" value="${usermgmt.outmail.port}"/>
+        <property name="username" value="${usermgmt.outmail.username}"/>
+        <property name="password" value="${usermgmt.outmail.password}"/>
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.transport.protocol">${usermgmt.outmail.transport.protocol}</prop>
+                <prop key="mail.smtp.auth">${usermgmt.outmail.smtp.auth}</prop>
+                <prop key="mail.smtp.starttls.enable">${usermgmt.outmail.smtp.starttls.enable}</prop>
+                <prop key="mail.debug">${usermgmt.debug}</prop>
+            </props>
+        </property>
+    </bean>
+
+</beans>

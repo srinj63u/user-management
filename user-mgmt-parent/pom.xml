@@ -12,6 +12,7 @@
 	<modules>
 		<module>../user-mgmt-entities</module>
 		<module>../user-mgmt-dao</module>
+		<module>../user-mgmt-outmail</module>
 		<module>../user-mgmt-service</module>
 		<module>../user-mgmt-schema</module>
 		<module>../user-mgmt</module>
