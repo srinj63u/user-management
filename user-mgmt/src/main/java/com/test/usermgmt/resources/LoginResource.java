@@ -23,6 +23,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.xml.ws.soap.Addressing;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -34,6 +36,8 @@ import org.springframework.stereotype.Component;
 @Component
 @Path("login/{userid}")
 public class LoginResource {
+	
+	private static final Logger logger = LoggerFactory.getLogger(LoginResource.class);
 
 	@Autowired
 	private UserService userService;
@@ -42,9 +46,14 @@ public class LoginResource {
     @Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response login(@PathParam("userid") String userId) {
-		//sends email with login link ex: /users/userid?token=axckednfdldl
-		userService.createLogin(userId, "/users/"+userId);
-		return Response.status(Response.Status.OK).build();
+		try{
+			//sends email with login link ex: /users/userid?token=axckednfdldl
+			userService.createLogin(userId, "/users/"+userId);
+			return Response.status(Response.Status.OK).build();
+		}catch(Exception e){
+			logger.error(userId, e);
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		}
 	}
 	
 	

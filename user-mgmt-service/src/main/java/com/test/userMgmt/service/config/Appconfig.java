@@ -14,6 +14,10 @@ public class Appconfig {
 	private String fromAddress;
 	@Value("${usermgmt.subject}")
 	private String subject;
+	@Value("${usermgmt.login.token.salt}")
+	private String loginTokenSalt;
+	@Value("${token.expiry.milliseconds}")
+	private String tokenExpiryMilliseconds;
 	
 	public String getFromAddress(){
 		return fromAddress;
@@ -22,5 +26,15 @@ public class Appconfig {
 	public String getSubject(){
 		return subject;
 	}
+
+	public String getLoginTokenSalt() {
+		return loginTokenSalt;
+	}
+
+	public Integer getTokenExpiryMilliseconds() {
+		return Integer.valueOf(tokenExpiryMilliseconds);
+	}
+	
+	
 	
 }
