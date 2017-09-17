@@ -10,6 +10,7 @@
     </properties>
 	
 	<modules>
+		<module>../user-mgmt-util</module>
 		<module>../user-mgmt-entities</module>
 		<module>../user-mgmt-dao</module>
 		<module>../user-mgmt-outmail</module>

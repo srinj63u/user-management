@@ -19,21 +19,27 @@
     <dependencies>
 		
 		<!-- internal dependencies -->
-		 <dependency>
+		<dependency>
 			<groupId>com.test</groupId>
-			<artifactId>user-mgmt-schema</artifactId>
-			<version>1.0-SNAPSHOT</version>
-		 </dependency>
-		 <dependency>
-			<groupId>com.test</groupId>
-			<artifactId>user-mgmt-service</artifactId>
+			<artifactId>user-mgmt-util</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
-		 <dependency>
+		<dependency>
 			<groupId>com.test</groupId>
 			<artifactId>user-mgmt-entities</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>com.test</groupId>
+			<artifactId>user-mgmt-service</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.test</groupId>
+			<artifactId>user-mgmt-schema</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		 </dependency>
+		 
 		
 		<!-- external dependencies -->
         <dependency>
@@ -145,6 +151,34 @@
                     </execution>
                 </executions>
             </plugin>
+			<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>aspectj-maven-plugin</artifactId>
+					<version>1.10</version>
+					<configuration>
+						
+						<aspectLibraries>
+							<aspectLibrary>
+								<groupId>${groupId}</groupId>
+								<artifactId>user-mgmt-util</artifactId>
+							</aspectLibrary>
+						</aspectLibraries>
+						
+						<complianceLevel>1.8</complianceLevel>
+						<source>1.8</source>
+						<target>1.8</target>
+					</configuration>
+					<executions>
+						<execution>
+							<configuration>
+								<source>1.8</source>
+							</configuration>
+							<goals>
+								<goal>compile</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
         </plugins>
     </build>
 
